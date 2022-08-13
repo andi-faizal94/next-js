@@ -12,15 +12,20 @@ const Home: NextPage = () => {
   const addItem = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
-      if (newItemName.trim().length > 0) {
-        const nameList = wishlistItems.findIndex(
-          (listName) => listName.name === newItemName
-        );
-        if (nameList === -1) {
-          setWishlistItems((current) => [...current, { name: newItemName }]);
-          setNewItemName('');
-        }
+      const isEmptyName = newItemName.trim().length === 0;
+      const isDuplicate =
+        wishlistItems.findIndex((item) => item.name === newItemName) !== -1;
+
+      if (isEmptyName) {
+        return alert("Item name can't be empty");
       }
+
+      if (isDuplicate) {
+        return alert(newItemName + ' already exist');
+      }
+
+      setWishlistItems((current) => [...current, { name: newItemName }]);
+      setNewItemName('');
     },
     [newItemName, wishlistItems]
   );
