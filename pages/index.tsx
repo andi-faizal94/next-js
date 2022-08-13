@@ -12,14 +12,15 @@ const Home: NextPage = () => {
   const addItem = useCallback(
     async (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+
       const isEmptyName = newItemName.trim().length === 0;
       const isDuplicate =
         wishlistItems.findIndex((item) => item.name === newItemName) !== -1;
-
+      // validation jika newItem kosong
       if (isEmptyName) {
         return alert("Item name can't be empty");
       }
-
+      // validation jika ada isi array yang duplikat
       if (isDuplicate) {
         return alert(newItemName + ' already exist');
       }
