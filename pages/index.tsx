@@ -1,5 +1,6 @@
 import type { NextPage } from 'next';
 import { useState, useCallback, FormEvent } from 'react';
+import FormWishlist from '../components/FormWishList';
 
 type WishlistItem = {
   name: string;
@@ -10,25 +11,19 @@ const Home: NextPage = () => {
   const [newItemName, setNewItemName] = useState<string>('');
 
   const addItem = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-
-      const isEmptyName = newItemName.trim().length === 0;
+    (data: WishlistItem) => {
+      const isEmptyName = data.name.trim().length === 0;
       const isDuplicate =
-        wishlistItems.findIndex((item) => item.name === newItemName) !== -1;
-      // validation jika newItem kosong
+        wishlistItems.findIndex((item) => data.name === item.name) !== -1;
       if (isEmptyName) {
         return alert("Item name can't be empty");
       }
-      // validation jika ada isi array yang duplikat
       if (isDuplicate) {
-        return alert(newItemName + ' already exist');
+        return alert(data.name + ' already exist');
       }
-
-      setWishlistItems((current) => [...current, { name: newItemName }]);
-      setNewItemName('');
+      setWishlistItems((current) => [...current, { name: data.name }]);
     },
-    [newItemName, wishlistItems]
+    [wishlistItems]
   );
 
   const deleteItem = (deletingIndex: number) => {
@@ -48,21 +43,8 @@ const Home: NextPage = () => {
       <div className='max-w-sm w-[320px] mx-6'>
         <h1 className='text-2xl font-bold text-center mb-3'>My Wishlist</h1>
         <div className='bg-white w-full rounded-xl shadow-xl overflow-hidden shadow-slate-300/50'>
-          <form
-            onSubmit={addItem}
-            className='flex px-4 py-3 bg-slate-50 border-b'
-          >
-            <input
-              type='text'
-              className='flex-1 bg-transparent focus:outline-none'
-              value={newItemName}
-              onChange={(e) => setNewItemName(e.target.value)}
-              placeholder='Type new stuff...'
-            />
-            <button type='submit' className='px-3 py-2 bg-slate-300 rounded-lg'>
-              Add
-            </button>
-          </form>
+          <FormWishlist onSubmit={addItem} />
+
           <ul className='w-full'>
             {wishlistItems?.map((listItem, index) => {
               return (
