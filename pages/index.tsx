@@ -1,27 +1,29 @@
 import type { NextPage } from 'next';
-import { useState, useCallback, FormEvent } from 'react';
+import { useState, useCallback } from 'react';
 import FormWishlist from '../components/FormWishList';
 
 type WishlistItem = {
   name: string;
 };
-
 const Home: NextPage = () => {
-  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
-  const [newItemName, setNewItemName] = useState<string>('');
-
+  const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([
+    { name: 'mbp' },
+  ]);
   const addItem = useCallback(
     (data: WishlistItem) => {
       const isEmptyName = data.name.trim().length === 0;
       const isDuplicate =
         wishlistItems.findIndex((item) => data.name === item.name) !== -1;
       if (isEmptyName) {
-        return alert("Item name can't be empty");
+        alert("Item name can't be empty");
+        return false;
       }
       if (isDuplicate) {
-        return alert(data.name + ' already exist');
+        alert(data.name + ' already exist');
+        return false;
       }
       setWishlistItems((current) => [...current, { name: data.name }]);
+      return true;
     },
     [wishlistItems]
   );

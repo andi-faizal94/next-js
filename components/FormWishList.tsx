@@ -2,12 +2,11 @@ import { FC, FormEvent, useCallback, useState } from 'react';
 
 // !!
 type FormWishlistProps = {
-  onSubmit: (data: WishlistItem) => void;
+  onSubmit: (data: WishlistItem) => any;
 };
 // !!
 
 const FormWishlist: FC<FormWishlistProps> = ({ onSubmit }) => {
-  // TODO (1) below
   const [newItemName, setNewItemName] = useState<string>('');
 
   // ini kan mau dimasukin ke <form onSubmit>, si <form onSubmit kan ngirim event (arahin cursor ke onSubmit, nanti dikasih tau dia ngirim apa)
@@ -16,14 +15,11 @@ const FormWishlist: FC<FormWishlistProps> = ({ onSubmit }) => {
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
 
-      // onSubmit(WishlistItem);
-      // gini:
-      // onSubmit yang dideklarasiin diatas (baris 5) itu ngirim data yang berupa WishlistItem,
-      // Kalo mau tau isi data WishlistItem, arahin aja cursornya ke bagian WishlistItem,
-      // caranya ini gimana mas?
-      // masih belum nangkep disini mas.
-      onSubmit({ name: newItemName });
-      setNewItemName('');
+      const shouldReset = onSubmit({ name: newItemName });
+
+      if (shouldReset) {
+        setNewItemName('');
+      }
     },
     [onSubmit, newItemName]
   );
